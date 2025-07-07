@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+@theme {
+  --color-background: #e9f0ff;
+  --color-primary: #3b82f6;
+}
+
+@layer base {
+  a {
+    @apply text-primary;
+  }
+}
+
+@layer components {
+  .form {
+    @apply flex flex-col gap-6 p-8 m-24 bg-white rounded-lg shadow-lg;
+  }
+
+  .form h1 {
+    @apply text-3xl font-semibold text-center;
+  }
+
+  .primary-button {
+    @apply flex items-center justify-center p-2 text-lg text-white rounded-lg shadow cursor-pointer h-14 bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed disabled:text-gray-300;
+  }
+
+  .page-y-padding {
+    @apply py-8;
+  }
+}
