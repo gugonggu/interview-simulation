@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col justify-between h-screen">
+    <div className="flex flex-col justify-between h-full page-y-padding">
       <div className="flex flex-col items-center justify-center gap-4">
         <Image src={logo} alt="로고" className="w-auto mx-auto max-h-28" />
         <span className="text-lg text-gray-400">
@@ -33,7 +33,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col gap-4 text-xl">
-        <Link href="/register" className="primary-button">
+        <Link href="/interview/settings" className="primary-button">
           시작하기
         </Link>
         <Link

@@ -27,4 +27,8 @@
   .page-y-padding {
     @apply py-8;
   }
+
+  .sm-bubble {
+    @apply px-2 py-1 rounded-full;
+  }
 }

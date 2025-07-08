@@ -5,7 +5,7 @@ import PrevStage from "@/components/prev-stage";
 import ProgressBar from "@/components/progress-bar";
 import { useSettingsStore } from "@/lib/store";
 import { redirect } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineBriefcase, HiOutlineCheckCircle } from "react-icons/hi2";
 
 interface TextInputProps {
@@ -221,6 +221,18 @@ const Summary = () => {
 
 const Setting = () => {
   const [stage, setStage] = useState<number>(1);
+  const { category, questionType, difficulty } = useSettingsStore();
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (stage === 1) {
+      setIsDisabled(!category.trim());
+    } else if (stage === 2) {
+      setIsDisabled(questionType.length === 0);
+    } else if (stage === 3) {
+      setIsDisabled(!difficulty);
+    }
+  }, [stage, category, questionType, difficulty]);
 
   const onClick = () => {
     if (stage !== 3) {
@@ -231,9 +243,9 @@ const Setting = () => {
   };
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col justify-between page-y-padding h-full">
       {stage === 1 ? <GoBack /> : <PrevStage setStage={setStage} />}
-      <div>
+      <div className="flex flex-col gap-12">
         <ProgressBar stage={stage} />
         <div className="items-center my-0 form">
           {stage === 1 ? (
@@ -246,7 +258,11 @@ const Setting = () => {
         </div>
       </div>
       {stage === 3 && <Summary />}
-      <button className="primary-button" onClick={onClick}>
+      <button
+        className="primary-button"
+        onClick={onClick}
+        disabled={isDisabled}
+      >
         {stage === 3 ? "면접 시작하기" : "다음"}
       </button>
     </div>

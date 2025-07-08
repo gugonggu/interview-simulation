@@ -17,7 +17,7 @@ const Login = () => {
   const [state, action] = useActionState(login, null);
 
   return (
-    <div>
+    <div className="page-y-padding">
       <GoBack />
       <form action={action} className="form">
         <h1>로그인</h1>

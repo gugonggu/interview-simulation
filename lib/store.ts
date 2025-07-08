@@ -33,3 +33,78 @@ export const useSettingsStore = create<State & Actions>((set) => ({
   setDifficulty: (difficulty: string) => set({ difficulty }),
   resetSettings: () => set({ category: "", questionType: [], difficulty: "" }),
 }));
+
+interface ChatFeedbackState {
+  text: string;
+  role: string;
+  time: Date | null;
+  isFeedbackable: boolean | null;
+  questionIntend?: string;
+  answerTips?: string[];
+  wells?: string[];
+  improves?: string[];
+  improvement?: string;
+}
+
+export interface ChatFeedbackActions {
+  setChatFeedback: (
+    text: string,
+    role: string,
+    time: Date,
+    isFeedbackable: boolean,
+    questionIntend?: string,
+    answerTips?: string[],
+    wells?: string[],
+    improves?: string[],
+    improvement?: string
+  ) => void;
+  resetChatFeedback: () => void;
+}
+
+export const useChatFeedbackStore = create<
+  ChatFeedbackState & ChatFeedbackActions
+>((set) => ({
+  text: "",
+  role: "",
+  time: null,
+  isFeedbackable: null,
+  questionIntend: "",
+  answerTips: [],
+  wells: [],
+  improves: [],
+  improvement: "",
+  setChatFeedback: (
+    text: string,
+    role: string,
+    time: Date,
+    isFeedbackable: boolean,
+    questionIntend?: string,
+    answerTips?: string[],
+    wells?: string[],
+    improves?: string[],
+    improvement?: string
+  ) =>
+    set({
+      text,
+      role,
+      time,
+      isFeedbackable,
+      questionIntend,
+      answerTips,
+      wells,
+      improves,
+      improvement,
+    }),
+  resetChatFeedback: () =>
+    set({
+      text: "",
+      role: "",
+      time: null,
+      isFeedbackable: null,
+      questionIntend: "",
+      answerTips: [],
+      wells: [],
+      improves: [],
+      improvement: "",
+    }),
+}));

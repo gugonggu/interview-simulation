@@ -17,7 +17,7 @@ const Register = () => {
   const [state, action] = useActionState(createAccount, null);
 
   return (
-    <div>
+    <div className="page-y-padding">
       <GoBack />
       <form action={action} className="form">
         <h1>회원가입</h1>
