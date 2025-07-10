@@ -8,10 +8,54 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String   @unique
+  id        Int         @id @default(autoincrement())
+  username  String      @unique
+  email     String      @unique
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  chats     Chat[]
+  Interview Interview[]
+}
+
+model Chat {
+  id             Int        @id @default(autoincrement())
+  user           User       @relation(fields: [userId], references: [id])
+  userId         Int
+  text           String
+  role           String
+  time           DateTime   @default(now())
+  isFeedbackable Boolean
+  questionIntend String?
+  answerTips     String?
+  questionType   String?
+  wells          String?
+  improves       String?
+  improvement    String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  Interview      Interview? @relation(fields: [interviewId], references: [id])
+  interviewId    String?
+}
+
+model Interview {
+  id                  String   @id @default(uuid())
+  category            String
+  questionType        String
+  difficulty          String
+  totalScore          String
+  grade               String
+  timeSpend           Int
+  techScore           String
+  softScore           String
+  communicationScore  String
+  problemSolvingScore String
+  wells               String
+  improves            String
+  improvement         String
+  user                User     @relation(fields: [userId], references: [id])
+  userId              Int
+  chats               Chat[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }

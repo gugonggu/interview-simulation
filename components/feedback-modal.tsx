@@ -68,7 +68,7 @@ export const FeedbackModal = () => {
                 <span>잘한 점</span>
               </div>
               <div className="flex flex-col gap-2">
-                {wells?.map((well, index) => (
+                {wells?.split("/").map((well, index) => (
                   <div key={index} className="flex gap-2 text-sm text-gray-500">
                     <HiCheck />
                     <span>{well}</span>
@@ -82,7 +82,7 @@ export const FeedbackModal = () => {
                 <span>개선할 점</span>
               </div>
               <div className="flex flex-col gap-2">
-                {improves?.map((improve, index) => (
+                {improves?.split("/").map((improve, index) => (
                   <div key={index} className="flex gap-2 text-sm text-gray-500">
                     <HiCheck />
                     <span>{improve}</span>
@@ -96,7 +96,7 @@ export const FeedbackModal = () => {
           <p>{role === "interviewer" ? "답변 팁" : "개선 방안"}</p>
           {role === "interviewer" ? (
             <div className="flex flex-col gap-2">
-              {answerTips?.map((tip, index) => (
+              {answerTips?.split("/").map((tip, index) => (
                 <div
                   key={index}
                   className="flex items-center gap-2 text-sm text-gray-500"

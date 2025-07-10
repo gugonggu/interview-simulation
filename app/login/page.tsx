@@ -4,12 +4,7 @@ import { login } from "@/app/login/action";
 import Input from "@/components/Input";
 import Button from "@/components/button";
 import GoBack from "@/components/go-back";
-import {
-  PASSWORD_MAXLENGTH,
-  PASSWORD_MINLENGTH,
-  USERNAME_MAXLENGTH,
-  USERNAME_MINLENGTH,
-} from "@/lib/constants";
+import { PASSWORD_MAXLENGTH, PASSWORD_MINLENGTH } from "@/lib/constants";
 import Link from "next/link";
 import { useActionState } from "react";
 

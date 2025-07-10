@@ -40,10 +40,14 @@ interface ChatFeedbackState {
   time: Date | null;
   isFeedbackable: boolean | null;
   questionIntend?: string;
-  answerTips?: string[];
-  wells?: string[];
-  improves?: string[];
+  answerTips?: string;
+  wells?: string;
+  improves?: string;
   improvement?: string;
+  prevQuestion?: string;
+  prevAnswer?: string;
+  totalEvaluation?: string;
+  totalScore?: string;
 }
 
 export interface ChatFeedbackActions {
@@ -53,10 +57,14 @@ export interface ChatFeedbackActions {
     time: Date,
     isFeedbackable: boolean,
     questionIntend?: string,
-    answerTips?: string[],
-    wells?: string[],
-    improves?: string[],
-    improvement?: string
+    answerTips?: string,
+    wells?: string,
+    improves?: string,
+    improvement?: string,
+    prevQuestion?: string,
+    prevAnswer?: string,
+    totalEvaluation?: string,
+    totalScore?: string
   ) => void;
   resetChatFeedback: () => void;
 }
@@ -69,20 +77,28 @@ export const useChatFeedbackStore = create<
   time: null,
   isFeedbackable: null,
   questionIntend: "",
-  answerTips: [],
-  wells: [],
-  improves: [],
+  answerTips: "",
+  wells: "",
+  improves: "",
   improvement: "",
+  prevQuestion: "",
+  prevAnswer: "",
+  totalEvaluation: "",
+  totalScore: "",
   setChatFeedback: (
     text: string,
     role: string,
     time: Date,
     isFeedbackable: boolean,
     questionIntend?: string,
-    answerTips?: string[],
-    wells?: string[],
-    improves?: string[],
-    improvement?: string
+    answerTips?: string,
+    wells?: string,
+    improves?: string,
+    improvement?: string,
+    prevQuestion?: string,
+    prevAnswer?: string,
+    totalEvaluation?: string,
+    totalScore?: string
   ) =>
     set({
       text,
@@ -94,6 +110,10 @@ export const useChatFeedbackStore = create<
       wells,
       improves,
       improvement,
+      prevQuestion,
+      prevAnswer,
+      totalEvaluation,
+      totalScore,
     }),
   resetChatFeedback: () =>
     set({
@@ -102,9 +122,13 @@ export const useChatFeedbackStore = create<
       time: null,
       isFeedbackable: null,
       questionIntend: "",
-      answerTips: [],
-      wells: [],
-      improves: [],
+      answerTips: "",
+      wells: "",
+      improves: "",
       improvement: "",
+      prevQuestion: "",
+      prevAnswer: "",
+      totalEvaluation: "",
+      totalScore: "",
     }),
 }));
