@@ -6,7 +6,6 @@ interface Routes {
 }
 
 const publicOnlyUrls: Routes = {
-  "/": true,
   "/login": true,
   "/register": true,
 };
@@ -16,7 +15,7 @@ export const middleware = async (req: NextRequest) => {
   const found = publicOnlyUrls[req.nextUrl.pathname];
   if (!id) {
     if (!found) {
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL("/login", req.url));
     }
   } else {
     if (found) {

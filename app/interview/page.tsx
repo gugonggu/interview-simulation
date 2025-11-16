@@ -8,9 +8,9 @@ import {
 import { FeedbackModal } from "@/components/feedback-modal";
 import { useChatFeedbackStore, useSettingsStore } from "@/lib/store";
 import { formatTime, formatToKorean12Hour } from "@/lib/utils";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useFormStatus } from "react-dom";
 import {
   HiArrowLeft,
   HiOutlineChatBubbleLeftRight,
@@ -86,16 +86,45 @@ const Header = ({
 }: HeaderProps) => {
   const [seconds, setSeconds] = useState(0);
   const [saveLoading, setSaveLoading] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   const router = useRouter();
 
+  const hasUserAnswer = chatHistory.some((chat) => chat.role === "interviewee");
+
+  // 페이지 이탈 시 경고
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (!isSaved && hasUserAnswer) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isSaved, hasUserAnswer]);
+
+  // 상단 뒤로가기(설정 화면으로)
   const onClick = () => {
+    if (!isSaved && hasUserAnswer) {
+      const leave = window.confirm(
+        "저장되지 않은 면접 기록이 있습니다. 설정 화면으로 돌아가시겠습니까?"
+      );
+      if (!leave) return;
+    }
     router.replace("/interview/settings");
   };
 
+  // 면접 저장하기
   const onSave = async () => {
+    if (!hasUserAnswer) {
+      alert("최소 한 개 이상의 답변을 입력한 후 저장할 수 있습니다.");
+      return;
+    }
+
     setSaveLoading(true);
-    await saveInterview({
+    const interviewId = await saveInterview({
       category,
       questionType,
       difficulty,
@@ -103,6 +132,13 @@ const Header = ({
       chatHistory,
     });
     setSaveLoading(false);
+
+    if (interviewId) {
+      setIsSaved(true);
+      router.replace(`/interview/result/${interviewId}`);
+    } else {
+      alert("면접 저장에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -117,8 +153,20 @@ const Header = ({
           <HiOutlineChatBubbleLeftRight className="text-2xl text-primary" />
           <span>면접 진행 중</span>
         </button>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-3">
           <Timer seconds={seconds} setSeconds={setSeconds} />
+          <Link
+            href="/history"
+            className="hidden text-xs text-gray-500 underline sm:inline"
+          >
+            히스토리
+          </Link>
+          <Link
+            href="/profile"
+            className="hidden text-xs text-gray-500 underline sm:inline"
+          >
+            마이페이지
+          </Link>
           <button
             onClick={onSave}
             disabled={saveLoading}
@@ -128,23 +176,6 @@ const Header = ({
           >
             {saveLoading ? "저장 중..." : "면접 끝내기"}
           </button>
-        </div>
-      </div>
-      <div className="flex items-center gap-2 text-sm">
-        <div className="sm-bubble bg-background text-primary">{category}</div>
-        {questionType.map((type) => (
-          <div key={type} className="sm-bubble bg-[#FFFBEB] text-[#92400E]">
-            {type}
-          </div>
-        ))}
-        <div
-          className={`sm-bubble ${
-            difficulty === "일반 면접"
-              ? "bg-[#F0FDF4] text-[#15803D]"
-              : "bg-[#FEF2F2]"
-          }`}
-        >
-          {difficulty}
         </div>
       </div>
     </header>
@@ -265,7 +296,7 @@ const ChatRoom = ({ chatHistory }: ChatRoomProps) => {
             improves={chat.improves}
             improvement={chat.improvement}
             prevQuestion={lastQuestion.text}
-            prevAnswer={lastAnswer.text}
+            prevAnswer={lastAnswer?.text}
           />
         ))}
       </div>
@@ -370,18 +401,6 @@ const Interview = () => {
       answerTips:
         "구체적인 경험과 사례를 들어 설명하세요./STAR 기법(상황-임무-행동-결과)을 활용하면 효과적입니다./답변은 2-3분 내로 간결하게 마무리하세요.",
       questionType: "인성 질문",
-    },
-    {
-      text: "안녕하세요, 저는 프론트엔드 개발자 지원자입니다. HTML, CSS, JavaScript를 사용하여 웹 애플리케이션을 개발해왔습니다. 최근에는 React와 Next.js를 활용한 프로젝트에 집중하고 있습니다.",
-      role: "interviewee",
-      time: new Date(),
-      isFeedbackable: true,
-      wells:
-        "자신의 경험을 구체적으로 언급했습니다./관련 기술에 대한 이해도가 잘 드러납니다.",
-      improves:
-        "답변이 다소 길어 핵심이 흐려질 수 있습니다./기술적 용어 사용이 불명확한 부분이 있습니다.",
-      improvement:
-        "핵심 내용을 먼저 간결하게 전달한 후 상세 설명을 덧붙이면 더 효과적인 답변이 될 것입니다. 또한 기술 용어를 정확하게 사용하여 전문성을 더 잘 어필할 수 있습니다.",
     },
   ]);
 

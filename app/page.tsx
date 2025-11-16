@@ -43,10 +43,16 @@ export default function Home() {
           로그인
         </Link>
       </div>
-      <div className="flex justify-center items-center border-[1px] rounded-lg border-[#FDE68A] bg-[#FFFBEB] p-4">
-        <span className="text-[#995523]">
-          💡 회원가입 없이도 바로 체험해보실 수 있어요!
-        </span>
+
+      {/* ▼ 추가한 네비게이션 영역 */}
+      <div className="mt-4 flex items-center justify-center gap-4 text-xs text-gray-400">
+        <Link href="/history" className="hover:text-gray-600">
+          히스토리
+        </Link>
+        <span>·</span>
+        <Link href="/profile" className="hover:text-gray-600">
+          마이페이지
+        </Link>
       </div>
     </div>
   );
